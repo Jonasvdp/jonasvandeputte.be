@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jonas Vandeputte</title>
+<meta name="description" content="Jonas Vandeputte — Let's talk.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" id="favicon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%23fff%22/%3E%3Crect x=%222%22 y=%222%22 width=%2228%22 height=%2228%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22/%3E%3Cpath fill=%22%23000%22 d=%22M10 8h6v12.5c0 1.4-1.1 2.5-2.5 2.5H10.5C9.1 23 8 21.9 8 20.5V17h2.5v3.5h3V10.5H10z%22/%3E%3Crect x=%2218.5%22 y=%2220.5%22 width=%225.5%22 height=%222.5%22 fill=%22%23000%22/%3E%3C/svg%3E">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#fff}
+  body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
+  a{
+    display:inline-block;
+    border:1px solid #000;color:#000;background:#fff;
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:1rem;line-height:1.4;
+    text-decoration:none;white-space:pre;
+    padding:14px 30px;
+    /* vaste breedte: ruimte voor "let's talk_", zodat het kader niet verspringt tijdens het typen */
+    width:calc(11ch + 62px);
+    text-align:center;
+    transition:background .15s,color .15s;
+  }
+  a:hover{background:#000;color:#fff}
+  a:focus-visible{outline:2px solid #000;outline-offset:4px}
+  .cursor{display:inline-block}
+  .cursor.blink{animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+</style>
+</head>
+<body>
+  <a id="talk" href="#" aria-label="Let's talk"><span id="txt" aria-hidden="true"></span><span class="cursor" id="cur" aria-hidden="true">_</span></a>
+  <noscript><p style="font-family:monospace;margin-top:16px">hi [at] jonasvandeputte.be</p></noscript>
+
+  <script>
+    const email = "hi" + "@" + "jonasvandeputte.be";
+    document.getElementById("talk").href = "mailto:" + email;
+
+    const txt = document.getElementById("txt");
+    const cur = document.getElementById("cur");
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    const typeSpeed = () => 90 + Math.random() * 90;   // menselijk, niet te regelmatig
+    const backSpeed = () => 55 + Math.random() * 30;
+
+    async function type(s) {
+      for (const ch of s) { txt.textContent += ch; await wait(typeSpeed()); }
+    }
+    async function back(n) {
+      for (let i = 0; i < n; i++) { txt.textContent = txt.textContent.slice(0, -1); await wait(backSpeed()); }
+    }
+    const blink = on => cur.classList.toggle("blink", on);
+
+    async function run() {
+      blink(true);  await wait(700);
+      blink(false); await type("Hi!");
+      blink(true);  await wait(2000);
+      blink(false); await back(3);
+      blink(true);  await wait(500);
+      blink(false); await type("Lets ta");   // vergeet eerst de apostrof
+      await wait(450);                       // ...oeps
+      await back(4);                         // terug tot "Let"
+      await wait(250);
+      await type("'s talk");
+      blink(true);
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      txt.textContent = "Let's talk"; blink(true);
+    } else {
+      run();
+    }
+
+    // Knipperende cursor in het tab-icoon
+    const favOn  = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%23fff%22/%3E%3Crect x=%222%22 y=%222%22 width=%2228%22 height=%2228%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22/%3E%3Cpath fill=%22%23000%22 d=%22M10 8h6v12.5c0 1.4-1.1 2.5-2.5 2.5H10.5C9.1 23 8 21.9 8 20.5V17h2.5v3.5h3V10.5H10z%22/%3E%3Crect x=%2218.5%22 y=%2220.5%22 width=%225.5%22 height=%222.5%22 fill=%22%23000%22/%3E%3C/svg%3E";
+    const favOff = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%23fff%22/%3E%3Crect x=%222%22 y=%222%22 width=%2228%22 height=%2228%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%222%22/%3E%3Cpath fill=%22%23000%22 d=%22M10 8h6v12.5c0 1.4-1.1 2.5-2.5 2.5H10.5C9.1 23 8 21.9 8 20.5V17h2.5v3.5h3V10.5H10z%22/%3E%3C/svg%3E";
+    const fav = document.getElementById("favicon");
+    let favState = true;
+    setInterval(() => { favState = !favState; fav.href = favState ? favOn : favOff; }, 530);
+  </script>
+</body>
+</html>
